@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Applications\\CarRentalPlatform\\CarRentalPlatform.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Services\\G2Reservations.WebAPI\\G2Reservations.WebAPI.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Services\\G2CarRentalCustomers\\G2CarRentalCustomers.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Services\\G2Maintenance.WebAPI\\G2Maintenance.WebAPI.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Services\\G2VehicleInventory\\G2VehicleInventory.WebAPI\\G2VehicleInventory.WebAPI.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "G2API_Gateway\\G2API_Gateway.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]

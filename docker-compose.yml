@@ -1,0 +1,97 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Password111!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  customers-api:
+    build:
+      context: .
+      dockerfile: Services/G2CarRentalCustomers/Dockerfile
+    container_name: customers-api
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=CustomerProfile;User Id=sa;Password=Password111!;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "7058:8080"
+
+  reservations-api:
+    build:
+      context: .
+      dockerfile: Services/G2Reservations.WebAPI/Dockerfile
+    container_name: reservations-api
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=G2ReservationsDb;User Id=sa;Password=Password111!;TrustServerCertificate=True;Encrypt=False"
+      ServiceUrls__CustomersApi: "http://customers-api:8080/"
+      ServiceUrls__VehicleInventoryApi: "http://vehicleinventory-api:8080/"
+    ports:
+      - "7200:8080"
+
+  maintenance-api:
+    build:
+      context: .
+      dockerfile: Services/G2Maintenance/G2Maintenance.WebAPI/Dockerfile
+    container_name: maintenance-api
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=MaintenanceDb;User Id=sa;Password=Password111!;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "7123:8080"
+
+  vehicleinventory-api:
+    build:
+      context: .
+      dockerfile: Services/G2VehicleInventory/G2VehicleInventory.WebAPI/Dockerfile
+    container_name: vehicleinventory-api
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=VehicleInventory;User Id=sa;Password=Password111!;TrustServerCertificate=True;Encrypt=False"
+    ports:
+      - "7182:8080"
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: G2API_Gateway/Dockerfile
+    container_name: api-gateway
+    depends_on:
+      - customers-api
+      - maintenance-api
+      - vehicleinventory-api
+      - reservations-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "7298:8080"
+
+  carrental-mvc:
+    build:
+      context: .
+      dockerfile: Applications/CarRentalPlatform/Dockerfile
+    container_name: carrental-mvc
+    depends_on:
+      - api-gateway
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ApiGateway__BaseUrl: "http://api-gateway:8080/"
+    ports:
+      - "7045:8080"
+
+volumes:
+  sqlserver_data:

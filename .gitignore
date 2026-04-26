@@ -1,0 +1,18 @@
+# Visual Studio
+.vs
+.user
+.suo
+
+# Build
+bin
+obj
+
+# Logs
+.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker (optional)
+docker-compose.override.yml
