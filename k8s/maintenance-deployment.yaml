@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maintenance-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maintenance-api
+  template:
+    metadata:
+      labels:
+        app: maintenance-api
+    spec:
+      initContainers:
+        - name: wait-for-sql
+          image: busybox:1.28
+          command: [ 'sh', '-c', "until nc -zv sqlserver 1433; do echo waiting for sql; sleep 2; done" ]
+      containers:
+        - name: maintenance-api
+          image: distributed-applications-final-assignment-maintenance-api:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "256Mi"
+            limits:
+              cpu: "400m"
+              memory: "1Gi"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=sqlserver,1433;Database=MaintenanceDb;User Id=sa;Password=Password111!;TrustServerCertificate=True;Encrypt=False"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
