@@ -1,0 +1,56 @@
+﻿@model List<CarRentalPlatform.Models.RepairHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Maintenance History";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Vehicle Repair History</h2>
+        <a asp-action="Create" class="btn btn-primary">Add Repair Record</a>
+    </div>
+
+    <form asp-action="History" method="post" class="row g-3 mb-4">
+        @Html.AntiForgeryToken()
+        <div class="col-md-4">
+            <label class="form-label">Vehicle ID</label>
+            <input type="number" name="vehicleId" class="form-control" value="@ViewBag.VehicleId" required />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-dark w-100">View History</button>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-secondary">
+            No repair history found.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Vehicle ID</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Performed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var repair in Model)
+                {
+                    <tr>
+                        <td>@repair.VehicleId</td>
+                        <td>@repair.RepairDate.ToShortDateString()</td>
+                        <td>@repair.Description</td>
+                        <td>$@repair.Cost.ToString()</td>
+                        <td>@repair.PerformedBy</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,29 @@
+﻿@model CarRentalPlatform.Models.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Vehicle Details";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Vehicle Details</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">Vehicle Code</dt>
+        <dd class="col-sm-9">@Model.VehicleCode</dd>
+
+        <dt class="col-sm-3">Location ID</dt>
+        <dd class="col-sm-9">@Model.LocationId</dd>
+
+        <dt class="col-sm-3">Vehicle Type</dt>
+        <dd class="col-sm-9">@Model.VehicleType</dd>
+
+        <dt class="col-sm-3">Vehicle Status</dt>
+        <dd class="col-sm-9">@Model.VehicleStatus</dd>
+    </dl>
+
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</div>

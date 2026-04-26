@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CarRentalPlatform.Models.VehicleViewModel>
+
+@{
+    ViewData["Title"] = "Vehicle Inventory";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Vehicle Inventory</h1>
+        <a asp-action="Create" class="btn btn-primary">Add New Vehicle</a>
+    </div>
+
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Vehicle Code</th>
+                <th>Location ID</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td><strong>@item.VehicleCode</strong></td>
+                        <td>@item.LocationId</td>
+                        <td>@item.VehicleType</td>
+                        <td>
+                            <span class="badge @(item.VehicleStatus == "Available" ? "bg-success" : "bg-warning text-dark")">
+                                @item.VehicleStatus
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Update Status</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No vehicles found in the inventory.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

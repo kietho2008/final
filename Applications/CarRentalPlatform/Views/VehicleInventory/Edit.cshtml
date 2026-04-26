@@ -1,0 +1,40 @@
+﻿@model CarRentalPlatform.Models.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Edit Vehicle Status";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Vehicle Status</h2>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Vehicle Code</label>
+            <input class="form-control" value="@Model.VehicleCode" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Current Status</label>
+            <input class="form-control" value="@Model.VehicleStatus" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">New Status</label>
+            <select name="newStatus" class="form-select">
+                <option value="">-- Select Status --</option>
+                <option value="Available">Available</option>
+                <option value="Reserved">Reserved</option>
+                <option value="Rented">Rented</option>
+                <option value="UnderService">UnderService</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>

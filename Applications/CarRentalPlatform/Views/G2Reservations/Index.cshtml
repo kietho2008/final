@@ -1,0 +1,121 @@
+﻿@model CarRentalPlatform.Models.G2ReservationsPageViewModel
+
+@{
+    ViewData["Title"] = "Reservations";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Reservations</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    Reserve a Vehicle
+                </div>
+                <div class="card-body">
+                    <form asp-action="Reserve" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.CustomerId" class="form-label"></label>
+                            <select asp-for="Reservation.CustomerId" asp-items="Model.Customers" class="form-select">
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                            <span asp-validation-for="Reservation.CustomerId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.VehicleId" class="form-label"></label>
+                            <select asp-for="Reservation.VehicleId" asp-items="Model.Vehicles" class="form-select">
+                                <option value="">-- Select Vehicle --</option>
+                            </select>
+                            <span asp-validation-for="Reservation.VehicleId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.StartDate" class="form-label"></label>
+                            <input asp-for="Reservation.StartDate" type="date" class="form-control" />
+                            <span asp-validation-for="Reservation.StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.EndDate" class="form-label"></label>
+                            <input asp-for="Reservation.EndDate" type="date" class="form-control" />
+                            <span asp-validation-for="Reservation.EndDate" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Reserve</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    Search Customer Reservation History
+                </div>
+                <div class="card-body">
+                    <form asp-action="SearchHistory" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label asp-for="Reservation.CustomerId" class="form-label">Customer</label>
+                            <select asp-for="Reservation.CustomerId" asp-items="Model.Customers" class="form-select">
+                                <option value="">-- Select Customer --</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark">View History</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-3">Reservation History</h3>
+
+    @if (!Model.ReservationHistory.Any())
+    {
+        <div class="alert alert-secondary">
+            No reservation history found.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Customer</th>
+                    <th>Vehicle Code</th>
+                    <th>Vehicle Type</th>
+                    <th>Vehicle Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ReservationHistory)
+                {
+                    <tr>
+                        <td>@item.CustomerName</td>
+                        <td>@item.VehicleCode</td>
+                        <td>@item.VehicleType</td>
+                        <td>@item.VehicleStatus</td>
+                        <td>@item.StartDate.ToShortDateString()</td>
+                        <td>@item.EndDate.ToShortDateString()</td>
+                        <td>@item.CreatedDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

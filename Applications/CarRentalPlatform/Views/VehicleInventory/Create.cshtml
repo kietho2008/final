@@ -1,0 +1,60 @@
+﻿@model CarRentalPlatform.Models.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Create Vehicle";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Add New Vehicle</h2>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="VehicleCode" class="form-label"></label>
+            <input asp-for="VehicleCode" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LocationId" class="form-label"></label>
+            <input asp-for="LocationId" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="VehicleType" class="form-label"></label>
+            <select asp-for="VehicleType" class="form-select">
+                <option value="">-- Select Type --</option>
+                <option value="Car">Car</option>
+                <option value="Truck">Truck</option>
+                <option value="Motorcycle">Motorcycle</option>
+                <option value="SUV">SUV</option>
+                <option value="Van">Van</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Convertible">Convertible</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Wagon">Wagon</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="VehicleStatus" class="form-label"></label>
+            <select asp-for="VehicleStatus" class="form-select">
+                <option value="">-- Select Status --</option>
+                <option value="Available">Available</option>
+                <option value="Sold">Sold</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Reserved">Reserved</option>
+                <option value="Rented">Rented</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
